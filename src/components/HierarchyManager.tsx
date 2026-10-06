@@ -81,6 +81,9 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
   const [articleLocation, setArticleLocation] = useState('Almoxarifado Central - Prateleira A1');
   const [articleUnitCost, setArticleUnitCost] = useState<number>(25.0);
 
+  // Notification message
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   // Available groups for selected type
   const availableGroupsForType = groups.filter((g) => g.typeId === wizardTypeId);
   // Available subgroups for selected group
@@ -118,6 +121,7 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
     onAddType(newType);
     setTypeName('');
     setTypeDescription('');
+    setNotification({ type: 'success', text: `Tipo ${newType.code} - ${newType.name} criado com sucesso!` });
     setActiveSubTab('types');
   };
 
@@ -136,6 +140,7 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
     onAddGroup(newGroup);
     setGroupName('');
     setGroupDescription('');
+    setNotification({ type: 'success', text: `Grupo ${newGroup.code} - ${newGroup.name} criado com sucesso!` });
     setActiveSubTab('groups');
   };
 
@@ -154,13 +159,14 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
     onAddSubgroup(newSub);
     setSubgroupName('');
     setSubgroupDescription('');
+    setNotification({ type: 'success', text: `Subgrupo ${newSub.code} - ${newSub.name} criado com sucesso!` });
     setActiveSubTab('subgroups');
   };
 
   const handleCreateArticle = (e: React.FormEvent) => {
     e.preventDefault();
     if (!articleName.trim() || !wizardTypeId || !effectiveGroupId || !effectiveSubgroupId) {
-      alert('Por favor, selecione Tipo, Grupo, Subgrupo e preencha o nome do artigo.');
+      setNotification({ type: 'error', text: 'Por favor, selecione Tipo, Grupo, Subgrupo e preencha o nome do artigo.' });
       return;
     }
 
@@ -190,7 +196,7 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
     onAddArticle(newArt);
     setArticleName('');
     setArticleDescription('');
-    alert(`Artigo ${newArt.code} cadastrado com sucesso!`);
+    setNotification({ type: 'success', text: `Artigo ${newArt.code} cadastrado com sucesso!` });
     setActiveSubTab('articles');
   };
 
@@ -223,6 +229,24 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
           <span className="text-emerald-400 font-bold">ART-01.01.01.001</span>
         </div>
       </div>
+
+      {notification && (
+        <div
+          className={`p-3 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+            notification.type === 'success'
+              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+              : 'bg-red-50 text-[#E30613] border border-red-200'
+          }`}
+        >
+          <span>{notification.text}</span>
+          <button
+            onClick={() => setNotification(null)}
+            className="text-neutral-500 hover:text-neutral-900 ml-2"
+          >
+            &times;
+          </button>
+        </div>
+      )}
 
       {/* Hierarchy Sub-Navigation Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-neutral-200 pb-2">
@@ -613,7 +637,8 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
                       </div>
                       <button
                         onClick={() => {
-                          if (confirm(`Excluir o Tipo ${t.name}?`)) onDeleteType(t.id);
+                          onDeleteType(t.id);
+                          setNotification({ type: 'success', text: `Tipo ${t.name} removido.` });
                         }}
                         className="text-neutral-400 hover:text-red-600 p-2 rounded hover:bg-neutral-100"
                         title="Excluir Tipo"
@@ -718,7 +743,8 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
                       </div>
                       <button
                         onClick={() => {
-                          if (confirm(`Excluir o Grupo ${g.name}?`)) onDeleteGroup(g.id);
+                          onDeleteGroup(g.id);
+                          setNotification({ type: 'success', text: `Grupo ${g.name} removido.` });
                         }}
                         className="text-neutral-400 hover:text-red-600 p-2 rounded hover:bg-neutral-100"
                         title="Excluir Grupo"
@@ -823,7 +849,8 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
                       </div>
                       <button
                         onClick={() => {
-                          if (confirm(`Excluir o Subgrupo ${s.name}?`)) onDeleteSubgroup(s.id);
+                          onDeleteSubgroup(s.id);
+                          setNotification({ type: 'success', text: `Subgrupo ${s.name} removido.` });
                         }}
                         className="text-neutral-400 hover:text-red-600 p-2 rounded hover:bg-neutral-100"
                         title="Excluir Subgrupo"
@@ -886,9 +913,8 @@ export const HierarchyManager: React.FC<HierarchyManagerProps> = ({
 
                     <button
                       onClick={() => {
-                        if (confirm(`Deseja realmente excluir o artigo "${art.name}" (${art.code})?`)) {
-                          onDeleteArticle(art.id);
-                        }
+                        onDeleteArticle(art.id);
+                        setNotification({ type: 'success', text: `Artigo ${art.name} (${art.code}) removido.` });
                       }}
                       className="text-neutral-400 hover:text-red-600 p-2 rounded hover:bg-neutral-100 self-end sm:self-center"
                       title="Excluir Artigo"

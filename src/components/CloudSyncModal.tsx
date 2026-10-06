@@ -363,10 +363,8 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                   <button
                     onClick={() => {
-                      if (confirm('Deseja recarregar os 10 itens padrão com descrição detalhada assinada por Carlos?')) {
-                        onLoadInitial10();
-                        onClose();
-                      }
+                      onLoadInitial10();
+                      onClose();
                     }}
                     className="p-3 border border-neutral-300 rounded-lg bg-white hover:bg-neutral-50 text-left transition-colors"
                   >
@@ -381,10 +379,8 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({
 
                   <button
                     onClick={() => {
-                      if (confirm('Tem certeza que deseja esvaziar todo o estoque para iniciar testes vazios do zero?')) {
-                        onResetEmpty();
-                        onClose();
-                      }
+                      onResetEmpty();
+                      onClose();
                     }}
                     className="p-3 border border-red-200 rounded-lg bg-red-50/40 hover:bg-red-50 text-left transition-colors"
                   >
