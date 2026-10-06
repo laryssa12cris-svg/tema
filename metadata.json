@@ -1,0 +1,6 @@
+{
+  "name": "SENAI-SP | Sistema de Gestão de Estoques (SGE)",
+  "description": "Sistema de gestão e controle de estoque de materiais e insumos para oficinas e laboratórios do SENAI-SP com cadastro hierárquico, movimentações e relatórios.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
